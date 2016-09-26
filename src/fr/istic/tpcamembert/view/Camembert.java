@@ -21,6 +21,14 @@ import fr.istic.tpcamembert.model.IModel;
 
 public class Camembert extends JComponent implements MouseListener
 {
+	
+	/*
+	 * class permettant l'illustration d'un camembert
+	 * NOTE: les valeurs dimensionnelles sont sous la forme
+	 * "size" multiplié par quelque-chose
+	 * cela permet un resize des éléments en fonction de la
+	 * taille de la fenêtre (permets le resize manuel)
+	 */
 
 	private Graphics2D g2d;	
 	private IModel model;
@@ -49,24 +57,37 @@ public class Camembert extends JComponent implements MouseListener
 		g2d = (Graphics2D) g;
 		Dimension d = getSize();
 		
+		// on enregistre un certain nombre
+		// de variables qui vont être utilisées
+		// par la suite
 		double width = d.getWidth();
 		double height = d.getHeight();
 		if (width > height)
 			size = height * 0.8;
 		else size = width * 0.8;
+		// le centre du composant (origine du camembert)
 		oX = (int)d.getWidth()/2;
 		oY = (int)d.getHeight()/2;
 		
+		// on récupère les clés et les pourcentages associés
 		keys = model.getKeys();
 		percentages = model.getPercentages();
 		
+		// méthode dessinant les portions du camembert
 		drawArcs(g2d, d);
+		
+		// méthode dessinant un vide au milieu des potions
+		// (impression de cercle épais)
 		drawCircle (g2d, d, 1.25f, getBackground());
+		
+		// méthode dessinant le cercle central
 		drawCircle (g2d, d, 2, Color.BLUE);
 		
 		g2d.setFont(new Font("Arial", Font.BOLD, (int)(size * 0.045)));
 		g2d.setColor(Color.WHITE);
 		
+		// on récupère le titre de notre modèle
+		// et on l'affiche au centre
 		String titre = model.getTitle() + ": ";
 		String sum = model.getSum() + "";
 		g2d.drawString(titre, (int)(oX-titre.length()*(size * 0.012)), (int)(oY - size * 0.025));
@@ -74,12 +95,14 @@ public class Camembert extends JComponent implements MouseListener
 		description.repaint();
 	}
 	
+	// dessine un cercle
 	private void drawCircle (Graphics2D g2d, Dimension d, float factor, Color color) {
 		g2d.setColor(color);
 		int intSize = (int)(size / factor);
 		g2d.fillOval(oX-intSize/2, oY-intSize/2, intSize, intSize);
 	}
 	
+	// dessine les parts de camembert
 	private void drawArcs (Graphics2D g2d, Dimension d) {
 		float temp = 0;
 		boolean pair = true;
@@ -113,6 +136,8 @@ public class Camembert extends JComponent implements MouseListener
 		}
 	}
 	
+	// permet d'avancer la sélection
+	// (appelé par les boutons du descriptif)
 	public void selectionForward() {
 		if (selection == 0)
 			selection = model.getSize() - 1;
@@ -120,7 +145,9 @@ public class Camembert extends JComponent implements MouseListener
 		repaint();
 		description.repaint();
 	}
-	
+
+	// permet de reculer la sélection
+	// (appelé par les boutons du descriptif)
 	public void selectionBackward() {
 		if (selection == model.getSize() - 1)
 			selection = 0;
@@ -129,10 +156,12 @@ public class Camembert extends JComponent implements MouseListener
 		description.repaint();
 	}
 	
+	// remets la sélection à zéro
 	public void rebootSelection() {
 		selection = -1;
 	}
 	
+	// récupète la sélection courante
 	public int getSelection() {
 		return selection;
 	}
@@ -144,6 +173,7 @@ public class Camembert extends JComponent implements MouseListener
 		int tempSelect = selection;
 		rebootSelection();
 		
+		// on regarde si on click sur un item
 		clickItem(arg0, temp, x, y, tempSelect);
 		repaint();
 	}

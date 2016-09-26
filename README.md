@@ -1,2 +1,5 @@
 # CamembertMVC
-Bocquelet Yoan TP Camembert
+TP GLI - Camembert MVC
+
+Yoan BOCQUELET
+MITIC

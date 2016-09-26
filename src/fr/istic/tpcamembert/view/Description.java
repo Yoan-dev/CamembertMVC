@@ -110,6 +110,7 @@ public class Description extends JPanel {
 		// ajouter un item (à partir des JTextArea)
 		add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// on ajoute seulement si la key est présente et la value aussi sous forme de float
 				if (!key.getText().equals("") && !value.getText().equals("") && Tools.isFloat(value.getText()))
 					controller.addItem(key.getText(), text.getText(), Float.parseFloat(value.getText()));
 			}
